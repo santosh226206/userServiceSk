@@ -1,20 +1,29 @@
 package com.layp.userService.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.layp.userService.domain.Hotel;
+import com.layp.userService.domain.Rating;
 import com.layp.userService.entities.User;
 import com.layp.userService.exception.ResourceNotFoundException;
 import com.layp.userService.repository.UseRepository;
 import com.layp.userService.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     UseRepository useRepository;
+    @Autowired
+    RestTemplate restTemplate;
     @Override
     public User saveUser(User user) {
         String uuid= UUID.randomUUID().toString();
@@ -24,7 +33,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(String id) {
-        return useRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("User Does Not Esixt"));
+             User user=   useRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("User Does Not Esixt"));
+             Rating[] ratingsArray = restTemplate.getForObject("http://RATINGSERVICE/api/ratings/rating/user/" + id, Rating[].class);
+             List<Rating> ratings = Arrays.asList(ratingsArray);
+        ratings = ratings.stream().map((item) -> {
+            Hotel hotel = restTemplate.getForObject("http://HOTELSERVICE/api/hotels/getHotel/" + item.getHotelId(), Hotel.class);
+            item.setHotel(hotel);
+            return item;
+        }).collect(Collectors.toList());
+
+        user.setRatings(ratings);
+             return user;
     }
 
     @Override
