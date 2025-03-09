@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(String id, JsonNode userUpdates) {
         User existingUser = useRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         // Check and update fields based on the request body (JsonNode)
         if (userUpdates.has("username") && !userUpdates.get("username").isNull()) {
