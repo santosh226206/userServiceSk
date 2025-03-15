@@ -34,10 +34,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(String id) {
              User user=   useRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("User Does Not Esixt"));
-             Rating[] ratingsArray = restTemplate.getForObject("http://RATINGSERVICE/api/ratings/rating/user/" + id, Rating[].class);
+             Rating[] ratingsArray = restTemplate.getForObject("http://RATING-SERVICE/api/ratings/rating/user/" + id, Rating[].class);
              List<Rating> ratings = Arrays.asList(ratingsArray);
         ratings = ratings.stream().map((item) -> {
-            Hotel hotel = restTemplate.getForObject("http://HOTELSERVICE/api/hotels/getHotel/" + item.getHotelId(), Hotel.class);
+            Hotel hotel = restTemplate.getForObject("http://HOTEL-SERVICE/api/hotels/getHotel/" + item.getHotelId(), Hotel.class);
             item.setHotel(hotel);
             return item;
         }).collect(Collectors.toList());
