@@ -1,6 +1,7 @@
 package com.layp.userService.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.layp.userService.domain.AuthRequest;
 import com.layp.userService.entities.User;
 import com.layp.userService.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -50,5 +52,11 @@ public class UserController {
     public ResponseEntity<String> deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         return new ResponseEntity<>("User deleted successfully", HttpStatus.NO_CONTENT);
+    }
+    @PostMapping("/validate")
+    public ResponseEntity<Optional<User>> validateUser(@RequestBody AuthRequest request) {
+        // Validate credentials and return user details with role
+        Optional<User> user=userService.getByUserNameAndId(request.getUsername(),request.getPassword());
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 }

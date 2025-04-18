@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,5 +75,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String userId) {
         useRepository.deleteById(userId);
+    }
+
+    @Override
+    public Optional<User> getByUserNameAndId(String username, String password) {
+        return useRepository.findByUsernameAndPassword(username,password);
     }
 }

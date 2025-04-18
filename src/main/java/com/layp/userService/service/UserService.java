@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.layp.userService.entities.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
     // save user
@@ -16,5 +17,6 @@ public interface UserService {
     public User updateUser(String id, JsonNode user);
     // TODO: delete user
     public void deleteUser(String userId);
+    public Optional<User> getByUserNameAndId(String username, String password);
 
 }
