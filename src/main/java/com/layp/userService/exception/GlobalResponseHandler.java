@@ -24,4 +24,18 @@ public class GlobalResponseHandler {
             userResponse.setStatus(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(userResponse, HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(ResourceExist.class)
+    public ResponseEntity<UserResponse> handlerResourceNotFound(ResourceExist resourceExist){
+        String message = resourceExist.getMessage();
+
+        // Create a UserResponse using getters and setters
+        UserResponse userResponse = new UserResponse();
+//        userResponse.setMessage(message);  // Setting the message
+//        userResponse.setSuccess(true);     // Setting the success field to true
+//        userResponse.setStatus(HttpStatus.NOT_FOUND);  // Setting the status field to NOT_FOUND
+        userResponse.setMessage(message);
+        userResponse.setSuccess(true);
+        userResponse.setStatus(HttpStatus.CONFLICT);
+        return new ResponseEntity<>(userResponse, HttpStatus.CONFLICT);
+    }
 }

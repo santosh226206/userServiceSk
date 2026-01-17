@@ -2,6 +2,7 @@ package com.layp.userService.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.layp.userService.domain.AuthRequest;
+import com.layp.userService.domain.UserUpdateDto;
 import com.layp.userService.entities.User;
 import com.layp.userService.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class UserController {
 
     // Update user details
     @PutMapping("/updateUser/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody JsonNode userUpdates) {
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody UserUpdateDto userUpdates) {
         User updatedUser = userService.updateUser(id, userUpdates);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
